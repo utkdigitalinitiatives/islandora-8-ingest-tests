@@ -13,7 +13,7 @@ elif [[ -d "${GAMBLE_TARGET}" ]]; then
     rm -rf "${GAMBLE_TARGET:?}"*
 fi
 
-for E in "${GAMBLE_PIDS[@]}";
-    do curl -X GET "${URL}""gamble:""${E}""${OBJ}" --output "${GAMBLE_TARGET}""gamble_""${E}".tif;
-    curl -X GET "${URL}""gamble:""${E}""${MODS}" --output "$GAMBLE_TARGET}""gamble_""${E}".xml;
+for E in "${GAMBLE_PIDS[@]}"; do
+    curl -s -X GET "${URL}""gamble:""${E}""${OBJ}" --output "${GAMBLE_TARGET}""gamble_""${E}".tif;
+    curl -s -X GET "${URL}""gamble:""${E}""${MODS}" --output "${GAMBLE_TARGET}""gamble_""${E}".xml;
 done
