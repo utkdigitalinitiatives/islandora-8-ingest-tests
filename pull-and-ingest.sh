@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-GAMBLE=(101 102 103 104 105 106 107 108 109 110)
+# variables
+URL="https://digital.lib.utk.edu/collections/islandora/object/"
+GAMBLE_PIDS=(101 102 103 104 105 106 107 108 109 110)
+OBJ="/datastream/OBJ/content"
+MODS="/datastream/MODS/content"
 
 
-for E in "${GAMBLE[@]}";
-    do curl -X GET "https://digital.lib.utk.edu/collections/islandora/object/gamble:""${E}""/datastream/OBJ/content" --output gamble_"${E}".tif;
+for E in "${GAMBLE_PIDS[@]}";
+    do curl -X GET "${URL}""gamble:""${E}""${OBJ}";
 done
