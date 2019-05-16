@@ -14,10 +14,18 @@ OCR="/datastreams/OCR/content"
 GAMBLE_TARGET="/tmp/gamble/"
 ASCOOP_TARGET="/tmp/ascoop/issue1/"
 
+# check for temporary gamble ingest directory
 if [[ ! -d "${GAMBLE_TARGET}" ]]; then
     mkdir "${GAMBLE_TARGET}"
 elif [[ -d "${GAMBLE_TARGET}" ]]; then
     rm -rf "${GAMBLE_TARGET:?}"*
+fi
+
+# check for temporary ascoop ingest directory
+if [[ ! -d "${ASCOOP_TARGET}" ]]; then
+    mkdir "${ASCOOP_TARGET}"
+elif [[ -d "${ASCOOP_TARGET}" ]]; then
+    rm -rf "${ASCOOP_TARGET:?}"*
 fi
 
 for E in "${GAMBLE_PIDS[@]}"; do
