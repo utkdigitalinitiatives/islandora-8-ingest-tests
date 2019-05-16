@@ -32,3 +32,19 @@ for E in "${GAMBLE_PIDS[@]}"; do
     curl -s -X GET "${URL}""gamble:""${E}""${OBJ}" --output "${GAMBLE_TARGET}""gamble_""${E}".tif;
     curl -s -X GET "${URL}""gamble:""${E}""${MODS}" --output "${GAMBLE_TARGET}""gamble_""${E}".xml;
 done
+
+# neanderthal approach to our sample book object
+# the first item in the array is our book, everything else is a sequential page
+# in other words, this is *not* a generic solution for any book
+# TODO try to make this generic
+# get our book-level MODS
+curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[0]}""${MODS}" --output "${ASCOOP_TARGET}"MODS.xml;
+
+# get the rest of our other DSIDs
+for I in "${!ASCOOP_PIDS[@]}"; do
+    if [ "$I" = "0" ]; then
+        echo "Index 0 - skipping"
+    elif [ "$I" != "0" ]; then
+        echo "doing stuff"
+    fi
+done
