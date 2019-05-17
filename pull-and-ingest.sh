@@ -23,7 +23,7 @@ fi
 
 # check for temporary ascoop ingest directory
 if [[ ! -d "${ASCOOP_TARGET}" ]]; then
-    mkdir "${ASCOOP_TARGET}"
+    mkdir -p "${ASCOOP_TARGET}"
 elif [[ -d "${ASCOOP_TARGET}" ]]; then
     rm -rf "${ASCOOP_TARGET:?}"*
 fi
@@ -46,10 +46,10 @@ for I in "${!ASCOOP_PIDS[@]}"; do
         echo "Index 0 - skipping"
     elif [ "$I" != "0" ]; then
         echo "doing stuff"
-        mkdir "${ASCOOP_TARGET}""/""$I"
-        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OBJ}" --output "${ASCOOP_TARGET}""/""$I""/OBJ.tif"
-        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${MODS}" --output "${ASCOOP_TARGET}""/""$I""/MODS.xml"
-        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${HOCR}" --output "${ASCOOP_TARGET}""/""$I""/HOCR.html"
-        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OCR}" --output "${ASCOOP_TARGET}""/""$I""/OCR.txt"
+        mkdir "${ASCOOP_TARGET}""$I"
+        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OBJ}" --output "${ASCOOP_TARGET}""$I""/OBJ.tif"
+        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${MODS}" --output "${ASCOOP_TARGET}""$I""/MODS.xml"
+        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${HOCR}" --output "${ASCOOP_TARGET}""$I""/HOCR.html"
+        curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OCR}" --output "${ASCOOP_TARGET}""$I""/OCR.txt"
     fi
 done
