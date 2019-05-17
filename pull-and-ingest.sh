@@ -47,7 +47,7 @@ for I in "${!ASCOOP_PIDS[@]}"; do
     if [ "$I" = "0" ]; then
         echo "Index 0 - skipping"
     elif [ "$I" != "0" ]; then
-        echo "doing stuff"
+        echo "grabbing our page DSIDs..."
         mkdir "${ASCOOP_TARGET}""$I"
         curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OBJ}" --output "${ASCOOP_TARGET}""$I""/OBJ.tif"
         curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${MODS}" --output "${ASCOOP_TARGET}""$I""/MODS.xml"
@@ -57,6 +57,7 @@ for I in "${!ASCOOP_PIDS[@]}"; do
 done
 
 # drush the samples in
+cd /var/www/drupal/ || exit
 # gamble...
 drush -v -u 1 --uri=http://localhost ibsp --content_models=islandora:sp_large_image_cmodel --namespace=sp_large_image_collection --type=directory --scan_target="${GAMBLE_TARGET}"
 drush -v -u 1 --uri=http://localhost islandora_batch_ingest
