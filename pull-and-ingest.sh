@@ -6,11 +6,12 @@ GAMBLE_PIDS=(101 102 103 104 105 106 107 108 109 110)
 # ASCOOP_PIDS are not sequential but the array will be read in order
 # book, page 1, page 2, etc, etc
 ASCOOP_PIDS=(1507160130 1507160136 1507160134 1507160131 1507160132 1507160135 1507160133)
+# DSIDs
 OBJ="/datastream/OBJ/content"
 MODS="/datastream/MODS/content"
 HOCR="/datastreams/HOCR/content"
 OCR="/datastreams/OCR/content"
-
+# target directories
 GAMBLE_TARGET="/tmp/gamble/"
 ASCOOP_TARGET="/tmp/ascoop/issue1/"
 
@@ -28,6 +29,7 @@ elif [[ -d "${ASCOOP_TARGET}" ]]; then
     rm -rf "${ASCOOP_TARGET:?}"*
 fi
 
+# grab (g|s)am(b|p)le
 for E in "${GAMBLE_PIDS[@]}"; do
     curl -s -X GET "${URL}""gamble:""${E}""${OBJ}" --output "${GAMBLE_TARGET}""gamble_""${E}".tif;
     curl -s -X GET "${URL}""gamble:""${E}""${MODS}" --output "${GAMBLE_TARGET}""gamble_""${E}".xml;
@@ -40,7 +42,7 @@ done
 # get our book-level MODS
 curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[0]}""${MODS}" --output "${ASCOOP_TARGET}"MODS.xml;
 
-# get the rest of our other DSIDs
+# get the rest of our other book DSIDs
 for I in "${!ASCOOP_PIDS[@]}"; do
     if [ "$I" = "0" ]; then
         echo "Index 0 - skipping"
@@ -53,3 +55,4 @@ for I in "${!ASCOOP_PIDS[@]}"; do
         curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[$I]}""${OCR}" --output "${ASCOOP_TARGET}""$I""/OCR.txt"
     fi
 done
+
