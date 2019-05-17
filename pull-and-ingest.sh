@@ -56,3 +56,11 @@ for I in "${!ASCOOP_PIDS[@]}"; do
     fi
 done
 
+# drush the samples in
+# gamble...
+drush -v -u 1 --uri=http://localhost ibsp --content_models=islandora:sp_large_image_cmodel --namespace=sp_large_image_collection --type=directory --scan_target="${GAMBLE_TARGET}"
+drush -v -u 1 --uri=http://localhost islandora_batch_ingest
+
+# ascoop...
+drush -v -u 1 --uri=http://localhost islandora_book_batch_preprocess --content_models=islandora:bookCModel --namespace=bookCollection --type=directory --scan_target="${ASCOOP_TARGET}"
+drush -v -u 1 --uri=http://localhost islandora_batch_ingest
