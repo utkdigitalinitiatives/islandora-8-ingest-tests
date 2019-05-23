@@ -16,6 +16,7 @@ GAMBLE_TARGET="/tmp/gamble/"
 ASCOOP_TARGET="/tmp/ascoop/issue1/"
 
 # check for temporary gamble ingest directory
+echo "Checking for a Gamble directory."
 if [[ ! -d "${GAMBLE_TARGET}" ]]; then
     mkdir "${GAMBLE_TARGET}"
 elif [[ -d "${GAMBLE_TARGET}" ]]; then
@@ -23,6 +24,7 @@ elif [[ -d "${GAMBLE_TARGET}" ]]; then
 fi
 
 # check for temporary ascoop ingest directory
+echo "Checking for an Air Scoop directory."
 if [[ ! -d "${ASCOOP_TARGET}" ]]; then
     mkdir -p "${ASCOOP_TARGET}"
 elif [[ -d "${ASCOOP_TARGET}" ]]; then
@@ -30,6 +32,7 @@ elif [[ -d "${ASCOOP_TARGET}" ]]; then
 fi
 
 # grab (g|s)am(b|p)le
+echo "Pulling Gamble samples."
 for E in "${GAMBLE_PIDS[@]}"; do
     curl -s -X GET "${URL}""gamble:""${E}""${OBJ}" --output "${GAMBLE_TARGET}""gamble_""${E}".tif;
     curl -s -X GET "${URL}""gamble:""${E}""${MODS}" --output "${GAMBLE_TARGET}""gamble_""${E}".xml;
@@ -40,9 +43,11 @@ done
 # in other words, this is *not* a generic solution for any book
 # TODO try to make this generic
 # get our book-level MODS
+echo "Pulling Air Scoop main record."
 curl -s -X GET "${URL}""ascoop:""${ASCOOP_PIDS[0]}""${MODS}" --output "${ASCOOP_TARGET}"MODS.xml;
 
 # get the rest of our other book DSIDs
+echo "Pulling Air Scoop page-level records."
 for I in "${!ASCOOP_PIDS[@]}"; do
     if [ "$I" = "0" ]; then
         echo "Index 0 - skipping"
@@ -57,12 +62,15 @@ for I in "${!ASCOOP_PIDS[@]}"; do
 done
 
 # drush the samples in
+echo "Switching directories."
 cd /var/www/drupal/ || exit
 pwd
 # gamble...
+echo "Ingesting Gamble."
 drush -v -u 1 --uri=http://localhost ibsp --content_models=islandora:sp_large_image_cmodel --parent=islandora:sp_large_image_collection --namespace=islandora --type=directory --target="${GAMBLE_TARGET}" --strict=0
 drush -v -u 1 --uri=http://localhost islandora_batch_ingest
 
 # ascoop...
+echo "Ingesting Air Scoop."
 drush -v -u 1 --uri=http://localhost islandora_book_batch_preprocess --content_models=islandora:bookCModel --parent=islandora:bookCollection --namespace=islandora --type=directory --target=/tmp/ascoop/ --strict=0
 drush -v -u 1 --uri=http://localhost islandora_batch_ingest
