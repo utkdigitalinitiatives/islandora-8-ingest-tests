@@ -58,10 +58,11 @@ done
 
 # drush the samples in
 cd /var/www/drupal/ || exit
+pwd
 # gamble...
-drush -v -u 1 --uri=http://localhost ibsp --content_models=islandora:sp_large_image_cmodel --namespace=sp_large_image_collection --type=directory --target="${GAMBLE_TARGET}" --strict=0
+drush -v -u 1 --uri=http://localhost ibsp --content_models=islandora:sp_large_image_cmodel --parent=islandora:sp_large_image_collection --namespace=islandora --type=directory --target="${GAMBLE_TARGET}" --strict=0
 drush -v -u 1 --uri=http://localhost islandora_batch_ingest
 
 # ascoop...
-drush -v -u 1 --uri=http://localhost islandora_book_batch_preprocess --content_models=islandora:bookCModel --namespace=bookCollection --type=directory --target="${ASCOOP_TARGET}" --strict=0
+drush -v -u 1 --uri=http://localhost islandora_book_batch_preprocess --content_models=islandora:bookCModel --parent=islandora:bookCollection --namespace=islandora --type=directory --target=/tmp/ascoop/ --strict=0
 drush -v -u 1 --uri=http://localhost islandora_batch_ingest
